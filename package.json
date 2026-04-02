@@ -1,0 +1,35 @@
+{
+  "name": "rastroagro",
+  "version": "1.0.0",
+  "description": "PWA de rastreabilidade agrícola - Zero Digitação",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.3.0",
+    "@supabase/supabase-js": "^2.38.4",
+    "canvas-confetti": "^1.9.0",
+    "date-fns": "^3.0.0",
+    "framer-motion": "^11.0.0",
+    "leaflet": "^1.9.4",
+    "lucide-react": "^0.292.0",
+    "qrcode.react": "^1.0.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-leaflet": "^4.2.1",
+    "react-router-dom": "^7.13.2",
+    "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.0",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.31",
+    "tailwindcss": "^3.3.5",
+    "terser": "^5.46.1",
+    "vite": "^5.0.7"
+  }
+}
