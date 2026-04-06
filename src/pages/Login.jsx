@@ -1,9 +1,11 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { motion } from 'framer-motion'
-import { Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff, ArrowLeft } from 'lucide-react'
 
 export default function Login() {
+  const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -13,6 +15,7 @@ export default function Login() {
   const [userRole, setUserRole] = useState('produtor')
   const [nomeFazenda, setNomeFazenda] = useState('')
   const [whatsapp, setWhatsapp] = useState('')
+  const [bio, setBio] = useState('')
 
   const handleAuth = async (e) => {
     e.preventDefault()
@@ -29,7 +32,8 @@ export default function Login() {
             data: { 
               nome_fazenda: nomeFazenda,
               user_role: userRole,
-              whatsapp
+              whatsapp,
+              bio
             }
           }
         })
@@ -42,7 +46,8 @@ export default function Login() {
           nome_fazenda: nomeFazenda,
           email,
           user_role: userRole,
-          whatsapp: whatsapp || null
+          whatsapp: whatsapp || null,
+          bio: bio || null
         }])
 
         setError('✅ Cadastro realizado! Verifique seu email e faça login.')
@@ -51,6 +56,7 @@ export default function Login() {
         setPassword('')
         setNomeFazenda('')
         setWhatsapp('')
+        setBio('')
         setUserRole('produtor')
         setError('')
       } else {
@@ -73,6 +79,18 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-white flex overflow-hidden">
+      {/* Botão Voltar */}
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => navigate('/')}
+        className="fixed top-6 left-6 z-50 flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition-all shadow-lg hover:shadow-xl lg:top-8 lg:left-8"
+      >
+        <ArrowLeft size={20} />
+        <span className="hidden sm:inline">Voltar</span>
+      </motion.button>
+
+      <div className="min-h-screen bg-white flex overflow-hidden">
       {/* LADO ESQUERDO - IMAGEM */}
       <div className="hidden lg:flex w-1/2 relative overflow-hidden bg-cover bg-center" style={{ backgroundImage: 'url(/agro2.webp)' }}>
         <img
@@ -224,6 +242,23 @@ export default function Login() {
                   </div>
                 )}
 
+                {/* Bio (apenas produtor) */}
+                {userRole === 'produtor' && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Bio da Fazenda (opcional)
+                    </label>
+                    <textarea
+                      value={bio}
+                      onChange={(e) => setBio(e.target.value.slice(0, 500))}
+                      placeholder="Descreva sua fazenda, produtos e valores..."
+                      className="w-full px-4 py-3 border-0 rounded-xl bg-gray-100 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-green-500 outline-none transition-all resize-none"
+                      rows="3"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">{bio.length}/500 caracteres</p>
+                  </div>
+                )}
+
                 {/* Aviso sobre Geolocalização */}
                 {userRole === 'produtor' && (
                   <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
@@ -318,6 +353,7 @@ export default function Login() {
             © 2024 RastroAgro. Todos os direitos reservados.
           </p>
         </motion.div>
+      </div>
       </div>
     </div>
   )

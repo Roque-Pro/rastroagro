@@ -5,9 +5,10 @@ import { saveOfflineEvent } from '../lib/db'
 import { getGeoLocation } from '../lib/camera'
 import CameraCapture from '../components/CameraCapture'
 import Timeline from '../components/Timeline'
-import { ArrowLeft, Plus, QrCode, Calendar, MapPin, Leaf } from 'lucide-react'
+import { ArrowLeft, Plus, QrCode, Calendar, MapPin, Leaf, Download } from 'lucide-react'
 import { motion } from 'framer-motion'
 import QRCode from 'qrcode.react'
+import { downloadQRCodePDF } from '../lib/pdf'
 
 export default function LoteDetail() {
   const { loteId } = useParams()
@@ -17,28 +18,37 @@ export default function LoteDetail() {
   const [loading, setLoading] = useState(true)
   const [showCamera, setShowCamera] = useState(false)
   const [selectedQr, setSelectedQr] = useState(false)
+  const [downloadingPDF, setDownloadingPDF] = useState(false)
 
   useEffect(() => {
     const fetchLote = async () => {
       try {
+        console.log('🔹 Buscando lote com ID:', loteId)
+        
         const { data, error } = await supabase
           .from('lotes')
           .select('*, eventos_manejo(*)')
           .eq('id', loteId)
           .single()
 
-        if (error) throw error
+        if (error) {
+          console.error('❌ Erro ao buscar lote:', error)
+          throw error
+        }
 
+        console.log('✅ Lote encontrado:', data)
         setLote(data)
         setEventos(data.eventos_manejo || [])
       } catch (error) {
-        console.error('Erro ao buscar lote:', error)
+        console.error('❌ Erro completo:', error)
       } finally {
         setLoading(false)
       }
     }
 
-    fetchLote()
+    if (loteId) {
+      fetchLote()
+    }
   }, [loteId])
 
   const handleEventCapture = async (eventData) => {
@@ -107,7 +117,13 @@ export default function LoteDetail() {
   }
 
   if (showCamera) {
-    return <CameraCapture onEventCapture={handleEventCapture} loteId={loteId} />
+    return (
+      <CameraCapture 
+        onEventCapture={handleEventCapture} 
+        loteId={loteId}
+        onCancel={() => setShowCamera(false)}
+      />
+    )
   }
 
   return (
@@ -265,13 +281,39 @@ export default function LoteDetail() {
               </p>
             </div>
 
-            <motion.button
-              whileTap={{ scale: 0.98 }}
-              onClick={() => setSelectedQr(false)}
-              className="w-full bg-gradient-to-r from-agro-primary to-agro-secondary text-white font-bold py-3 rounded-xl hover:shadow-lg transition-shadow"
-            >
-              Fechar
-            </motion.button>
+            <div className="flex gap-3">
+              <motion.button
+                whileTap={{ scale: 0.98 }}
+                onClick={async () => {
+                  if (lote) {
+                    setDownloadingPDF(true)
+                    try {
+                      await downloadQRCodePDF(
+                        lote,
+                        `${window.location.origin}/check/${lote.qr_hash}`
+                      )
+                    } catch (error) {
+                      console.error('Erro ao fazer download:', error)
+                      alert('Erro ao gerar PDF')
+                    } finally {
+                      setDownloadingPDF(false)
+                    }
+                  }
+                }}
+                disabled={downloadingPDF}
+                className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                <Download size={18} />
+                {downloadingPDF ? 'Gerando...' : 'PDF'}
+              </motion.button>
+              <motion.button
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setSelectedQr(false)}
+                className="flex-1 bg-gradient-to-r from-agro-primary to-agro-secondary text-white font-bold py-3 rounded-xl hover:shadow-lg transition-shadow"
+              >
+                Fechar
+              </motion.button>
+            </div>
           </motion.div>
         </motion.div>
       )}

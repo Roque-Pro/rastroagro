@@ -1,4 +1,5 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
+import { CULTURAS, getCicloEstimado } from '../constants/culturas'
 
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY
 
@@ -25,20 +26,31 @@ export async function generateHarvestForecast(loteData) {
     // Input: $0.30/1M tokens | Output: $2.50/1M tokens (com free tier)
     const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
 
-    const prompt = `
-Você é um agrônomo especialista. Baseado nas informações abaixo, gere uma previsão de colheita:
+    const cicloEstimado = getCicloEstimado(loteData.cultura)
+    const culturasDisponiveis = CULTURAS.map(c => `${c.nome} (${c.categoria})`).join(', ')
 
-Cultura: ${loteData.cultura}
-Variedade: ${loteData.variedade}
-Data de Plantio: ${new Date(loteData.data_inicio).toLocaleDateString('pt-BR')}
-Registros de Atividades:
-${loteData.eventos?.map(e => `- ${e.tipo} em ${new Date(e.timestamp).toLocaleDateString('pt-BR')}`).join('\n')}
+    const prompt = `
+Você é um agrônomo especialista em agronegócio brasileiro. Baseado nas informações abaixo, gere uma previsão de colheita:
+
+**Informações do Lote:**
+- Cultura: ${loteData.cultura}
+- Variedade/Híbrido: ${loteData.variedade || 'Não especificada'}
+- Data de Plantio: ${new Date(loteData.data_inicio).toLocaleDateString('pt-BR')}
+- Ciclo Esperado: ${cicloEstimado || 'Desconhecido'}
+
+**Registros de Atividades:**
+${loteData.eventos?.map(e => `- ${e.tipo} em ${new Date(e.timestamp).toLocaleDateString('pt-BR')}`).join('\n') || '- Nenhum registro ainda'}
+
+**Culturas Conhecidas (para referência):**
+${culturasDisponiveis}
+
+Baseado em seu conhecimento agrícola, estime a data de colheita e o nível de confiança dessa previsão.
 
 Responda em JSON com este formato:
 {
   "dias_ate_colheita": <número de dias a partir de hoje>,
   "confianca_percentual": <0-100>,
-  "motivo": "<explicação breve em português>"
+  "motivo": "<explicação breve em português sobre o ciclo esperado>"
 }
 
 Retorne APENAS o JSON, sem texto adicional.
@@ -79,19 +91,19 @@ Retorne APENAS o JSON, sem texto adicional.
  * Calcula data padrão baseada na cultura (fallback)
  */
 function calcularDataPadrao(loteData) {
-  // Ciclos médios de culturas (em dias)
-  const ciclos = {
-    'Milho': 120,
-    'Soja': 110,
-    'Tomate': 60,
-    'Cana-de-açúcar': 540,
-    'Arroz': 120,
-    'Feijão': 90,
-    'Batata': 70,
-    'Alface': 40,
+  // Tenta buscar o ciclo na base de dados
+  const cicloEstimado = getCicloEstimado(loteData.cultura)
+  
+  // Se encontrou, extrai o número de dias (pega o primeiro número)
+  let ciclo = 100 // padrão
+  
+  if (cicloEstimado) {
+    const match = cicloEstimado.match(/\d+/)
+    if (match) {
+      ciclo = parseInt(match[0])
+    }
   }
   
-  const ciclo = ciclos[loteData.cultura] || 100
   const dataInicio = new Date(loteData.data_inicio)
   const dataColheita = new Date(dataInicio)
   dataColheita.setDate(dataColheita.getDate() + ciclo)

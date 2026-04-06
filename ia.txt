@@ -1,0 +1,95 @@
+Pera, mas e o banco de dados? Você viu o IA.txt que eu colei o banco de dados pra você ver o que falta pra poder ver se precisa implementar alguma alguma tabela, alguma coluna, alguma coisa nesse sentido? Porque eu pedi coisas novas. Você reparou isso? E o que eu pedi agora está funcionando bem?
+
+-- WARNING: This schema is for context only and is not meant to be run.
+-- Table order and constraints may not be valid for execution.
+
+CREATE TABLE public.config_culturas (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  nome character varying NOT NULL UNIQUE,
+  dias_ciclo integer NOT NULL,
+  descricao text,
+  emoji character varying,
+  created_at timestamp without time zone DEFAULT now(),
+  CONSTRAINT config_culturas_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.eventos_manejo (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  lote_id uuid NOT NULL,
+  tipo character varying NOT NULL CHECK (tipo::text = ANY (ARRAY['plantio'::character varying, 'adubo'::character varying, 'defensivo'::character varying, 'colheita'::character varying, 'outro'::character varying]::text[])),
+  foto_url text,
+  observacoes text,
+  volume_estimado numeric,
+  timestamp timestamp without time zone DEFAULT now(),
+  created_at timestamp without time zone DEFAULT now(),
+  localizacao jsonb,
+  CONSTRAINT eventos_manejo_pkey PRIMARY KEY (id),
+  CONSTRAINT eventos_manejo_lote_id_fkey FOREIGN KEY (lote_id) REFERENCES public.lotes(id)
+);
+CREATE TABLE public.leads_negociacao (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  lote_id uuid NOT NULL,
+  comprador_id uuid NOT NULL,
+  produtor_id uuid NOT NULL,
+  oferta_id uuid,
+  status character varying DEFAULT 'novo'::character varying CHECK (status::text = ANY (ARRAY['novo'::character varying, 'contatado'::character varying, 'negociando'::character varying, 'fechado'::character varying, 'perdido'::character varying]::text[])),
+  quantidade_reservada numeric,
+  mensagem text,
+  whatsapp_enviado boolean DEFAULT false,
+  created_at timestamp without time zone DEFAULT now(),
+  updated_at timestamp without time zone DEFAULT now(),
+  CONSTRAINT leads_negociacao_pkey PRIMARY KEY (id),
+  CONSTRAINT leads_negociacao_lote_id_fkey FOREIGN KEY (lote_id) REFERENCES public.lotes(id),
+  CONSTRAINT leads_negociacao_comprador_id_fkey FOREIGN KEY (comprador_id) REFERENCES public.perfis(id),
+  CONSTRAINT leads_negociacao_produtor_id_fkey FOREIGN KEY (produtor_id) REFERENCES public.perfis(id),
+  CONSTRAINT leads_negociacao_oferta_id_fkey FOREIGN KEY (oferta_id) REFERENCES public.ofertas_mercado(id)
+);
+CREATE TABLE public.lotes (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  produtor_id uuid NOT NULL,
+  cultura character varying NOT NULL,
+  variedade character varying,
+  data_inicio date NOT NULL,
+  data_colheita_estimada date,
+  qr_hash character varying NOT NULL UNIQUE,
+  area_hectares numeric,
+  status character varying DEFAULT 'ativo'::character varying,
+  marketplace_visivel boolean DEFAULT false,
+  certificacao character varying,
+  created_at timestamp without time zone DEFAULT now(),
+  updated_at timestamp without time zone DEFAULT now(),
+  localizacao jsonb,
+  confianca integer DEFAULT 0,
+  motivo_previsao text,
+  CONSTRAINT lotes_pkey PRIMARY KEY (id),
+  CONSTRAINT lotes_produtor_id_fkey FOREIGN KEY (produtor_id) REFERENCES public.perfis(id)
+);
+CREATE TABLE public.ofertas_mercado (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  lote_id uuid NOT NULL,
+  quantidade_total numeric NOT NULL,
+  quantidade_reservada numeric DEFAULT 0,
+  saldo_disponivel numeric DEFAULT (quantidade_total - quantidade_reservada),
+  preco_base numeric,
+  unidade_medida character varying DEFAULT 'un'::character varying,
+  status character varying DEFAULT 'ativa'::character varying CHECK (status::text = ANY (ARRAY['ativa'::character varying, 'pausada'::character varying, 'finalizada'::character varying]::text[])),
+  created_at timestamp without time zone DEFAULT now(),
+  updated_at timestamp without time zone DEFAULT now(),
+  CONSTRAINT ofertas_mercado_pkey PRIMARY KEY (id),
+  CONSTRAINT ofertas_mercado_lote_id_fkey FOREIGN KEY (lote_id) REFERENCES public.lotes(id)
+);
+CREATE TABLE public.perfis (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid NOT NULL UNIQUE,
+  nome_fazenda character varying NOT NULL,
+  cpf_cnpj character varying UNIQUE,
+  email character varying,
+  telefone character varying,
+  plano character varying DEFAULT 'free'::character varying CHECK (plano::text = ANY (ARRAY['free'::character varying, 'pro'::character varying, 'enterprise'::character varying]::text[])),
+  user_role character varying DEFAULT 'produtor'::character varying CHECK (user_role::text = ANY (ARRAY['produtor'::character varying, 'comprador'::character varying, 'admin'::character varying]::text[])),
+  created_at timestamp without time zone DEFAULT now(),
+  updated_at timestamp without time zone DEFAULT now(),
+  whatsapp character varying,
+  localizacao jsonb,
+  CONSTRAINT perfis_pkey PRIMARY KEY (id),
+  CONSTRAINT perfis_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
+);

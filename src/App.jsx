@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { supabase } from './lib/supabase'
+import LandingPage from './pages/LandingPage'
 import Dashboard from './pages/Dashboard'
 import LoteDetail from './pages/LoteDetail'
 import PublicTimeline from './components/PublicTimeline'
+import ProducerProfile from './pages/ProducerProfile'
+import FazendaProfile from './pages/FazendaProfile'
 import BuyerMarketplace from './pages/BuyerMarketplace'
 import BuyerForecast from './pages/BuyerForecast'
 import BuyerMap from './pages/BuyerMap'
@@ -82,8 +85,10 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Rotas Públicas */}
-        <Route path="/check/:qrHash" element={<PublicTimeline />} />
+         {/* Rotas Públicas */}
+         <Route path="/check/:qrHash" element={<PublicTimeline />} />
+         <Route path="/produtor/:producerId" element={<ProducerProfile />} />
+         <Route path="/fazenda/:fazendaSlug" element={<FazendaProfile />} />
         
         {/* Rotas Autenticadas */}
         {session ? (
@@ -124,7 +129,7 @@ function App() {
         ) : (
           <>
             <Route path="/login" element={<Login />} />
-            <Route path="/" element={<Navigate to="/login" replace />} />
+            <Route path="/" element={<LandingPage />} />
           </>
         )}
       </Routes>

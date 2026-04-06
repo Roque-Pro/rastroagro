@@ -6,7 +6,7 @@
 
 RastroAgro é uma **PWA (Progressive Web App)** de rastreabilidade agrícola que resolve um problema real: a falta de transparência entre quem planta e quem compra.
 
-Produtores registram cada fase da safra com geolocalização automática. Compradores veem em tempo real quando a colheita estará pronta, consultam o histórico completo e entram em contato direto via WhatsApp.
+Produtores registram cada fase da safra com geolocalização automática, criam sua mini página pública com bio e histórico de lotes. Compradores veem em tempo real quando a colheita estará pronta, consultam o histórico completo, acessam a mini página do produtor e entram em contato direto via WhatsApp.
 
 Simples? Sim. Eficiente? Muito.
 
@@ -22,6 +22,7 @@ O mercado agrícola funciona assim:
 RastroAgro muda isso:
 - ✅ Transparência total (fotos geolalizadas de cada fase)
 - ✅ Previsão automática de colheita (com IA)
+- ✅ Mini página pública por produtor com bio, filtros e histórico
 - ✅ Comunicação direta produtor ↔ comprador
 - ✅ Rastreabilidade pública via QR Code
 - ✅ Zero digitação extra (geoloc e data/hora automáticas)
@@ -149,14 +150,20 @@ src/
    - Sistema gera **previsão de colheita com IA** (opcional)
    - QR Code criado automaticamente
 
-3. **Registrar Fases**
-   - Tira foto de cada fase (plantio → colheita)
-   - App registra: geoloc + data/hora + foto automaticamente
-   - Timeline visual mostra o histórico
+3. **Gerenciar Bio**
+    - Cria descrição da fazenda (opcional na bio)
+    - Acessa mini página pública com link `/produtor/:id`
+    - Compartilha link com compradores
 
-4. **Compartilhar**
-   - QR Code leva a página pública com rastreabilidade completa
-   - Qualquer pessoa pode ver (transparência total)
+4. **Registrar Fases**
+    - Tira foto de cada fase (plantio → colheita)
+    - App registra: geoloc + data/hora + foto automaticamente
+    - Timeline visual mostra o histórico
+
+5. **Compartilhar**
+    - QR Code leva a página pública com rastreabilidade completa
+    - Qualquer pessoa pode ver (transparência total)
+    - Link da mini página com filtros por produto e data
 
 ### Comprador 🏪
 
@@ -172,13 +179,28 @@ src/
      - 🟢 **Verde**: Pronto para oferta (< 7 dias)
    - Clica no marcador → abre WhatsApp do produtor
 
-3. **Alternativas**
-   - **Marketplace**: Lista de cartas com filtros
-   - **Previsões**: Agrupar por região e volume esperado
+3. **Ver Mini Página do Produtor**
+    - Botão "Ver Fazenda" em cada card do marketplace
+    - Acessa `/produtor/:id` com filtros por produto e data
+    - Vê bio, todos os lotes e histórico rastreável
+
+4. **Alternativas**
+    - **Marketplace**: Lista de cartas com filtros
+    - **Previsões**: Agrupar por região e volume esperado
 
 ---
 
 ## Funcionalidades Principais
+
+### 🌾 Mini Página Pública do Produtor
+- Página dedicada por produtor (`/produtor/:id`)
+- Bio customizável de até 500 caracteres
+- Exibe todos os lotes com status
+- Filtros por produto (cultura)
+- Filtros por data de plantio
+- Ordenação automática (mais recente primeiro)
+- Contadores de lotes ativos e tipos de cultivos
+- Links para rastreabilidade completa de cada lote
 
 ### 🗺️ Mapa Interativo
 - Leaflet com marcadores coloridos
@@ -221,6 +243,7 @@ src/
 - email TEXT
 - user_role TEXT ('produtor' | 'comprador')
 - whatsapp VARCHAR(15)
+- bio TEXT (até 500 caracteres) -- novo campo
 - localizacao GEOMETRY(Point, 4326) -- geoloc
 ```
 

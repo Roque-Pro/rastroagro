@@ -2,15 +2,19 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { generateHarvestForecast } from '../lib/gemini'
-import { ArrowLeft, Plus, Zap } from 'lucide-react'
+import { ArrowLeft, Plus, Zap, X } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { v4 as uuidv4 } from 'uuid'
+import { CULTURAS, filtrarCulturas } from '../constants/culturas'
 
 export default function NewLote() {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [forecast, setForecast] = useState(null)
+  const [filtroAberto, setFiltroAberto] = useState(false)
+  const [filtroTermo, setFiltroTermo] = useState('')
+  const [culturasFiltradas, setCulturasFiltradas] = useState([])
   const [formData, setFormData] = useState({
     cultura: '',
     variedade: '',
@@ -24,6 +28,22 @@ export default function NewLote() {
       ...prev,
       [name]: value
     }))
+  }
+
+  const handleFiltroChange = (valor) => {
+    setFiltroTermo(valor)
+    setCulturasFiltradas(filtrarCulturas(valor))
+    setFiltroAberto(true)
+  }
+
+  const handleSelecionarCultura = (cultura) => {
+    setFormData(prev => ({
+      ...prev,
+      cultura: cultura.nome
+    }))
+    setFiltroAberto(false)
+    setFiltroTermo('')
+    setCulturasFiltradas([])
   }
 
   const handleGenerateForecast = async () => {
@@ -55,29 +75,76 @@ export default function NewLote() {
     setError('')
 
     try {
+      console.log('🔹 Iniciando criação de lote...')
+      
       // Buscar ID do perfil do usuário
-      const { data: { user } } = await supabase.auth.getUser()
-      const { data: perfil } = await supabase
+      console.log('🔹 Buscando usuário...')
+      const { data: { user }, error: authError } = await supabase.auth.getUser()
+      
+      if (authError || !user) {
+        throw new Error('Usuário não autenticado')
+      }
+      console.log('✅ Usuário encontrado:', user.id)
+
+      console.log('🔹 Buscando perfil...')
+      let { data: perfis, error: perfilError } = await supabase
         .from('perfis')
         .select('id')
         .eq('user_id', user.id)
-        .single()
+
+      if (perfilError) {
+        console.error('Erro ao buscar perfil:', perfilError)
+        throw new Error(`Erro ao buscar perfil: ${perfilError.message}`)
+      }
+
+      // Se não tiver perfil, criar automaticamente
+      if (!perfis || perfis.length === 0) {
+        console.log('🔹 Perfil não existe. Criando automaticamente...')
+        const slug = `fazenda-${Date.now()}`
+        const { data: novoPerfil, error: createError } = await supabase
+          .from('perfis')
+          .insert([{
+            user_id: user.id,
+            nome_fazenda: 'Minha Propriedade',
+            email: user.email,
+            user_role: 'produtor',
+            slug: slug
+          }])
+          .select('id')
+          .single()
+
+        if (createError) {
+          console.error('Erro ao criar perfil:', createError)
+          throw new Error(`Erro ao criar perfil: ${createError.message}`)
+        }
+        
+        perfis = [novoPerfil]
+        console.log('✅ Perfil criado automaticamente:', novoPerfil.id)
+      }
+
+      const perfil = perfis[0]
+      console.log('✅ Perfil encontrado:', perfil.id)
 
       // Gerar QR hash
       const qrHash = `LOT_${uuidv4().replace(/-/g, '').substring(0, 12)}`
 
       // Se não tiver previsão gerada, gerar agora
-      let dataColheita = forecast?.data_estimada
-      if (!dataColheita) {
-        const forecastData = await generateHarvestForecast({
+      console.log('🔹 Verificando previsão de colheita...')
+      let previsao = forecast
+      if (!previsao?.data_estimada) {
+        console.log('🔹 Gerando previsão com IA...')
+        previsao = await generateHarvestForecast({
           cultura: formData.cultura,
           variedade: formData.variedade,
           data_inicio: formData.data_inicio,
           eventos: []
         })
-        dataColheita = forecastData.data_estimada
+        console.log('✅ Previsão gerada:', previsao)
+      } else {
+        console.log('✅ Usando previsão anterior:', previsao)
       }
 
+      console.log('🔹 Criando lote no banco...')
       // Criar lote
       const { data: novoLote, error: insertError } = await supabase
         .from('lotes')
@@ -86,7 +153,9 @@ export default function NewLote() {
           cultura: formData.cultura,
           variedade: formData.variedade,
           data_inicio: formData.data_inicio,
-          data_colheita_estimada: dataColheita,
+          data_colheita_estimada: previsao?.data_estimada || null,
+          confianca: previsao?.confianca || 0,
+          motivo_previsao: previsao?.motivo || null,
           area_hectares: formData.area_hectares ? parseFloat(formData.area_hectares) : null,
           qr_hash: qrHash,
           status: 'ativo',
@@ -95,12 +164,19 @@ export default function NewLote() {
         .select()
         .single()
 
-      if (insertError) throw insertError
+      if (insertError) {
+        console.error('Erro ao inserir lote:', insertError)
+        throw insertError
+      }
 
-      // Redirecionar para detalhes do lote
-      navigate(`/lote/${novoLote.id}`)
+      console.log('✅ Lote criado:', novoLote.id)
+      console.log('🔹 Redirecionando para página da fazenda...')
+      
+      // Redirecionar para página da fazenda
+      const fazendaSlug = perfis[0].slug || perfis[0].id
+      navigate(`/fazenda/${fazendaSlug}`)
     } catch (err) {
-      console.error('Erro:', err)
+      console.error('❌ Erro completo:', err)
       setError(err.message || 'Erro ao criar lote')
     } finally {
       setLoading(false)
@@ -134,29 +210,67 @@ export default function NewLote() {
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Cultura */}
-            <div>
+            {/* Cultura com Autocomplete */}
+            <div className="relative">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Cultura
               </label>
-              <select
-                name="cultura"
-                value={formData.cultura}
-                onChange={handleChange}
-                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-agro-primary focus:outline-none transition-colors text-gray-900"
-                required
-              >
-                <option value="">Selecione uma cultura</option>
-                <option value="Milho">🌽 Milho</option>
-                <option value="Soja">🫘 Soja</option>
-                <option value="Tomate">🍅 Tomate</option>
-                <option value="Cana-de-açúcar">🌾 Cana-de-açúcar</option>
-                <option value="Arroz">🍚 Arroz</option>
-                <option value="Feijão">🫘 Feijão</option>
-                <option value="Batata">🥔 Batata</option>
-                <option value="Alface">🥬 Alface</option>
-                <option value="Outra">Outra</option>
-              </select>
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Digite para filtrar..."
+                  value={formData.cultura || filtroTermo}
+                  onChange={(e) => {
+                    handleFiltroChange(e.target.value)
+                    if (!e.target.value) {
+                      setFormData(prev => ({ ...prev, cultura: '' }))
+                    }
+                  }}
+                  onFocus={() => setFiltroAberto(true)}
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-green-600 focus:outline-none transition-colors text-gray-900"
+                  required={!formData.cultura}
+                />
+                {formData.cultura && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFormData(prev => ({ ...prev, cultura: '' }))
+                      setFiltroTermo('')
+                      setFiltroAberto(false)
+                    }}
+                    className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                  >
+                    <X size={20} />
+                  </button>
+                )}
+              </div>
+
+              {/* Dropdown de Culturas */}
+              {filtroAberto && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-gray-300 rounded-lg shadow-lg z-50 max-h-64 overflow-y-auto"
+                >
+                  {culturasFiltradas.length > 0 ? (
+                    culturasFiltradas.map((cultura, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => handleSelecionarCultura(cultura)}
+                        className="w-full px-4 py-3 text-left hover:bg-green-50 border-b border-gray-100 last:border-b-0 transition-colors"
+                      >
+                        <div className="font-medium text-gray-900">{cultura.nome}</div>
+                        <div className="text-xs text-gray-500">{cultura.categoria} • {cultura.ciclo}</div>
+                      </button>
+                    ))
+                  ) : (
+                    <div className="px-4 py-3 text-gray-500 text-center">
+                      Nenhuma cultura encontrada
+                    </div>
+                  )}
+                </motion.div>
+              )}
             </div>
 
             {/* Variedade */}

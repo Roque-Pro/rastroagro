@@ -37,7 +37,8 @@ export default function BuyerMarketplace() {
           data_colheita_estimada,
           localizacao,
           certificacao,
-          perfis(nome_fazenda, localizacao, whatsapp),
+          produtor_id,
+          perfis(id, nome_fazenda, localizacao, whatsapp),
           eventos_manejo(count)
         `)
         .eq('status', 'ativo')
@@ -277,22 +278,36 @@ export default function BuyerMarketplace() {
                           </span>
                         </div>
 
-                        {/* Botão de Contato */}
-                        {lote.perfis?.whatsapp ? (
-                          <motion.a
-                            whileTap={{ scale: 0.95 }}
-                            href={`https://wa.me/${lote.perfis.whatsapp}?text=Olá! Tenho interesse no ${lote.cultura} da ${lote.perfis?.nome_fazenda}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-full block text-center bg-gradient-to-r from-green-500 to-green-600 text-white font-bold py-3 rounded-lg hover:shadow-lg transition-shadow"
-                          >
-                            💬 WhatsApp
-                          </motion.a>
-                        ) : (
-                          <button disabled className="w-full bg-gray-300 text-gray-600 font-bold py-3 rounded-lg cursor-not-allowed">
-                            Sem contato
-                          </button>
-                        )}
+                        {/* Botões de Contato e Mini Página */}
+                        <div className="space-y-2">
+                          {lote.perfis?.whatsapp ? (
+                            <motion.a
+                              whileTap={{ scale: 0.95 }}
+                              href={`https://wa.me/${lote.perfis.whatsapp}?text=Olá! Tenho interesse no ${lote.cultura} da ${lote.perfis?.nome_fazenda}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-full block text-center bg-gradient-to-r from-green-500 to-green-600 text-white font-bold py-3 rounded-lg hover:shadow-lg transition-shadow"
+                            >
+                              💬 WhatsApp
+                            </motion.a>
+                          ) : (
+                            <button disabled className="w-full bg-gray-300 text-gray-600 font-bold py-3 rounded-lg cursor-not-allowed">
+                              Sem contato
+                            </button>
+                          )}
+                          
+                          {lote.produtor_id && (
+                            <motion.a
+                              whileTap={{ scale: 0.95 }}
+                              href={`/produtor/${lote.produtor_id}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-full block text-center bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold py-2 rounded-lg hover:shadow-lg transition-shadow text-sm"
+                            >
+                              📄 Ver Fazenda
+                            </motion.a>
+                          )}
+                        </div>
                       </div>
                     </motion.div>
                   )

@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react'
 import { getCameraStream, stopStream, capturePhotoFromVideo, getGeoLocation } from '../lib/camera'
-import { Leaf, Droplets, Shield, Scissors, RotateCcw, AlertCircle, MapPin } from 'lucide-react'
+import { Leaf, Droplets, Shield, Scissors, RotateCcw, AlertCircle, MapPin, ArrowLeft } from 'lucide-react'
 import { motion } from 'framer-motion'
 import confetti from 'canvas-confetti'
 
@@ -11,8 +11,9 @@ const MANAGEMENT_TYPES = [
   { id: 'colheita', label: 'Colheita', icon: Scissors, color: 'bg-yellow-600', emoji: '🧺' }
 ]
 
-export default function CameraCapture({ onEventCapture, loteId }) {
+export default function CameraCapture({ onEventCapture, loteId, onCancel }) {
   const videoRef = useRef(null)
+  const fileInputRef = useRef(null)
   const [stream, setStream] = useState(null)
   const [photo, setPhoto] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -21,6 +22,7 @@ export default function CameraCapture({ onEventCapture, loteId }) {
   const [localizacao, setLocalizacao] = useState(null)
   const [geoLoading, setGeoLoading] = useState(false)
   const [geoError, setGeoError] = useState(null)
+  const [cameraAvailable, setCameraAvailable] = useState(true)
 
   useEffect(() => {
     const initCamera = async () => {
@@ -30,9 +32,11 @@ export default function CameraCapture({ onEventCapture, loteId }) {
         if (videoRef.current) {
           videoRef.current.srcObject = cameraStream
         }
+        setCameraAvailable(true)
         setLoading(false)
       } catch (error) {
-        console.error('Erro ao acessar câmera:', error)
+        console.error('Câmera não disponível:', error)
+        setCameraAvailable(false)
         setLoading(false)
       }
     }
@@ -45,6 +49,30 @@ export default function CameraCapture({ onEventCapture, loteId }) {
       }
     }
   }, [])
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    const reader = new FileReader()
+    reader.onload = async () => {
+      setPhoto(reader.result)
+      
+      // Capturar geolocalização automaticamente
+      setGeoLoading(true)
+      setGeoError(null)
+      try {
+        const geo = await getGeoLocation()
+        setLocalizacao(geo)
+      } catch (error) {
+        console.error('Erro geo:', error)
+        setGeoError(error.message || 'Erro ao capturar localização. Tente novamente.')
+      } finally {
+        setGeoLoading(false)
+      }
+    }
+    reader.readAsDataURL(file)
+  }
 
   const handleCapture = async () => {
     if (videoRef.current) {
@@ -132,20 +160,81 @@ export default function CameraCapture({ onEventCapture, loteId }) {
     )
   }
 
+  // Modo upload se câmera não estiver disponível
+  if (!cameraAvailable && !photo) {
+    return (
+      <div className="w-full h-screen bg-gradient-to-br from-gray-900 to-black flex flex-col p-4">
+        {/* Header com botão voltar */}
+        <div className="flex items-center gap-4 mb-6">
+          <button
+            onClick={onCancel}
+            className="hover:bg-white hover:bg-opacity-20 p-2 rounded-lg transition-colors text-white"
+          >
+            <ArrowLeft size={24} />
+          </button>
+          <h1 className="text-xl font-bold text-white">Registrar Fase</h1>
+        </div>
+
+        <motion.div
+          initial={{ y: -20 }}
+          animate={{ y: 0 }}
+          className="flex-1 flex flex-col items-center justify-center text-center space-y-6 p-6"
+        >
+          <div className="text-6xl">📷</div>
+          <h2 className="text-3xl font-bold text-white">Câmera não disponível</h2>
+          <p className="text-gray-300 text-lg max-w-sm">
+            Selecione uma imagem do seu computador para simular a captura
+          </p>
+          
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleFileUpload}
+            className="hidden"
+          />
+          
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            className="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-8 rounded-lg text-lg transition-colors"
+          >
+            Selecionar Imagem
+          </button>
+        </motion.div>
+      </div>
+    )
+  }
+
   return (
     <div className="w-full h-screen bg-black relative flex flex-col">
+      {/* Header com botão voltar */}
+      {!photo && cameraAvailable && (
+        <div className="absolute top-4 left-4 z-20">
+          <button
+            onClick={onCancel}
+            className="hover:bg-white hover:bg-opacity-20 p-2 rounded-lg transition-colors text-white"
+          >
+            <ArrowLeft size={24} />
+          </button>
+        </div>
+      )}
+
       {!photo ? (
         <>
-          <video
-            ref={videoRef}
-            autoPlay
-            playsInline
-            className="w-full h-full object-cover"
-          />
-          <button
-            onClick={handleCapture}
-            className="absolute bottom-8 left-1/2 transform -translate-x-1/2 w-20 h-20 bg-agro-secondary rounded-full border-4 border-white shadow-lg hover:bg-agro-primary transition-colors"
-          />
+          {cameraAvailable && (
+            <>
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                className="w-full h-full object-cover"
+              />
+              <button
+                onClick={handleCapture}
+                className="absolute bottom-8 left-1/2 transform -translate-x-1/2 w-20 h-20 bg-agro-secondary rounded-full border-4 border-white shadow-lg hover:bg-agro-primary transition-colors"
+              />
+            </>
+          )}
         </>
       ) : (
         <div className="w-full h-full flex flex-col">

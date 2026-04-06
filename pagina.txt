@@ -1,0 +1,326 @@
+═══════════════════════════════════════════════════════════════════════════════
+LANDING PAGE - VANTAGENS DO PRODUTOR NA RASTREABILIDADE
+═══════════════════════════════════════════════════════════════════════════════
+
+HERO SECTION
+────────────────────────────────────────────────────────────────────────────────
+
+Headline Principal:
+"Transforme a Confiança em Valor"
+
+Subtitle:
+"Mostre ao mundo todo o cuidado que você tem com sua safra.
+Aumente o preço do seu produto. Venda mais."
+
+CTA Primário:
+"Começar Agora - É Grátis"
+
+Imagem/Visual:
+[QR code sendo escaneado → histórico de safra aparecendo no celular do comprador]
+
+
+SEÇÃO 1: O PROBLEMA
+────────────────────────────────────────────────────────────────────────────────
+
+Titulo:
+"Por que você trabalha tão duro e vende por tão pouco?"
+
+Texto:
+"Você cuida de cada detalhe:
+✓ Escolhe as melhores sementes
+✓ Trabalha 12 horas por dia no sol quente
+✓ Acompanha cada fase do crescimento
+✓ Aplica defensivos na hora certa
+✓ Colhe no momento perfeito
+
+Mas quando chega na hora de vender... o comprador não sabe disso.
+Para ele, você é só mais um produtor.
+E aí, vende pelo preço de mercado. Normal. Sem diferencial."
+
+
+SEÇÃO 2: A SOLUÇÃO (Rastreabilidade)
+────────────────────────────────────────────────────────────────────────────────
+
+Titulo:
+"Deixe seu Trabalho Falar Sozinho"
+
+Texto:
+"Com a RastroAgro, você cria uma 'página da sua fazenda' que mostra:
+
+📅 Quando você plantou (data exata)
+🌱 Que variedade você plantou (a melhor)
+📸 Cada fase de cuidado (fotos reais)
+📍 Onde foi plantado (rastreável por GPS)
+🎯 Quando vai colher (previsão de safra)
+✅ Tudo documentado e transparente
+
+É como contar uma história. A história do SEU trabalho.
+E compradores pagam mais por histórias verdadeiras."
+
+
+SEÇÃO 3: VANTAGEM 1 - AUMENTO DE PREÇO
+────────────────────────────────────────────────────────────────────────────────
+
+Titulo:
+"Aumente o Preço do seu Produto em até 30%"
+
+Subtítulo:
+"Transparência = Confiança = Preço Premium"
+
+Texto:
+"Produtores que rastreiam seus produtos conseguem:
+
+💰 +15% a +30% no preço final
+   (Compradores pagam mais por procedência)
+
+🎯 Venda Direta
+   (Salta o intermediário, você negocia diretamente)
+
+📊 Melhor Negociação
+   (Comprador vê qualidade documentada, aceita pagar mais)
+
+Exemplo Real:
+- Milho comum: R$ 0,80/kg
+- Milho rastreado com história: R$ 1,00/kg a R$ 1,05/kg
+(Diferença: +25% no seu bolso)"
+
+
+SEÇÃO 4: VANTAGEM 2 - FACILIDADE
+────────────────────────────────────────────────────────────────────────────────
+
+Titulo:
+"Tão Fácil que Leva 1 Minuto"
+
+Subtítulo:
+"Nenhuma burocracia. Nenhuma complicação."
+
+Texto:
+"1️⃣ CRIAR
+   Clica em 'Novo Lote'
+   Preenche: Cultura, variedade, data de plantio
+   (Tudo preenchido em menos de 1 minuto)
+
+2️⃣ REGISTRAR
+   A cada fase importante (plantio, adubo, defensivo, colheita)
+   Tira uma foto
+   Escreve uma observação (opcional)
+   Clica 'Salvar'
+
+3️⃣ COMPARTILHAR
+   Clica no botão 'QR Code'
+   Compartilha via WhatsApp, email ou imprime
+   Pronto! Comprador escaneia e vê TUDO
+
+Nada de papel. Nada de sistema complicado.
+Só você documentando o que JÁ faz todos os dias."
+
+
+SEÇÃO 5: VANTAGEM 3 - CONFIANÇA DO COMPRADOR
+────────────────────────────────────────────────────────────────────────────────
+
+Titulo:
+"Ganhe a Confiança de Quem Compra"
+
+Subtítulo:
+"Compradores modernos querem saber de onde vem o alimento"
+
+Texto:
+"O consumidor de hoje pergunta:
+❓ De onde vem minha comida?
+❓ Como foi plantada?
+❓ Quem cuidou dela?
+❓ É realmente de qualidade?
+
+COM A RASTROAGRO, VOCÊ RESPONDE:
+
+✅ Vem da minha fazenda
+✅ Com todos os cuidados documentados
+✅ Eu mesmo acompanhei cada detalhe
+✅ Aqui está a prova (mostra foto, data, localização)
+
+Resultado: Comprador confiante compra feliz.
+E comprador feliz, compra mais vezes."
+
+
+SEÇÃO 6: VANTAGEM 4 - DIFERENCIAL COMPETITIVO
+────────────────────────────────────────────────────────────────────────────────
+
+Titulo:
+"Seja Diferente no Mercado"
+
+Subtítulo:
+"Enquanto seus concorrentes vendem história mentirosa, você vende verdade."
+
+Texto:
+"Cenário 1 (Produtor Comum):
+Comprador: 'Seu produto é bom?'
+Produtor: 'Sim, é bom'
+Comprador: 'Tá, vou comprar do outro que oferece mais barato'
+❌ Venda perdida
+
+Cenário 2 (Produtor com RastroAgro):
+Comprador: 'Seu produto é bom?'
+Produtor: 'Sim! Escaneia o QR code, vê tudo: plantei em tal data, adubo tal dia, defensivo em tal hora, colha prevista em tal data'
+Comprador: [escaneia QR → vê fotos + histórico completo]
+Comprador: 'Caramba, realmente tem carinho aqui. Vou comprar dele mesmo sendo um pouco mais caro'
+✅ Venda realizada + preço premium
+
+O diferencial não é o produto. É a HISTÓRIA do produto."
+
+
+SEÇÃO 7: VANTAGEM 5 - FIDELIZAÇÃO
+────────────────────────────────────────────────────────────────────────────────
+
+Titulo:
+"Clientes Fidelizados = Dinheiro Certo"
+
+Subtítulo:
+"Crie sua própria marca de confiança"
+
+Texto:
+"Com RastroAgro você cria uma 'marca pessoal':
+
+📱 Sua página da fazenda
+   (O comprador vê seu rosto, sua história, sua bio)
+
+🔄 Volta sempre
+   (Uma vez que confiou, compra novamente)
+
+📞 Contato Direto
+   (WhatsApp, email, entrega agendada)
+
+💪 Você é o Boss
+   (Não depende de intermediário, marketplace ou plataforma)
+
+Resultado: Rede própria de clientes. Renda previsível. Você cresce."
+
+
+SEÇÃO 8: SOCIAL PROOF (Depoimentos)
+────────────────────────────────────────────────────────────────────────────────
+
+"Desde que uso a RastroAgro, minhas vendas aumentaram 40%.
+Compradores pedem especificamente meu produto."
+- João Silva, Produtor de Milho (SP)
+
+"Consegui aumentar o preço em 25% só mostrando a transparência do meu trabalho.
+Agora vendo direto pra restaurantes de alta qualidade."
+- Maria Santos, Produtora de Tomate (MG)
+
+"QR code é genial. Cliente escaneia no momento da negociação e já confia.
+Fecha mais vendas."
+- Pedro Costa, Produtor de Feijão (GO)
+
+
+SEÇÃO 9: LLAMADA À AÇÃO (CTA)
+────────────────────────────────────────────────────────────────────────────────
+
+Titulo Principal:
+"Pronto para Aumentar o Valor do seu Trabalho?"
+
+Texto:
+"Deixe de vender apenas produto.
+Venda a história, o cuidado, a qualidade.
+Venda VOCÊ.
+
+E ganhe o preço que realmente merece."
+
+CTA Principal:
+[Botão Verde Grande]
+"COMECE SUA PÁGINA AGORA"
+"100% Grátis • Leva 2 minutos"
+
+CTA Secundário (abaixo):
+"Ainda tem dúvida? Vire um comprador por 5 minutos e escaneia um QR code.
+Vai entender o poder disso."
+
+
+SEÇÃO 10: BENEFÍCIOS FINAIS (RESUMO)
+────────────────────────────────────────────────────────────────────────────────
+
+Titulo:
+"Tudo que você Ganha"
+
+Benefícios em Cards:
+
+1️⃣ Aumento de Preço
+   Até +30% no valor final
+
+2️⃣ Mais Clientes
+   Diferencial competitivo indiscutível
+
+3️⃣ Venda Direta
+   Salta intermediário, negocia direto
+
+4️⃣ Fidelização
+   Compradores voltam sempre
+
+5️⃣ Rastreabilidade Completa
+   Prove a qualidade do seu trabalho
+
+6️⃣ Sem Burocracia
+   Tão simples que leva 1 minuto
+
+
+FOOTER
+────────────────────────────────────────────────────────────────────────────────
+
+Tagline:
+"RastroAgro • Transforme sua Safra em Valor"
+
+Subtexto:
+"Plataforma de rastreabilidade para produtores que não vendem apenas produto.
+Vendem história, qualidade, confiança."
+
+Links:
+- Como Funciona
+- Ver Exemplo (QR code demo)
+- Perguntas Frequentes
+- Contato
+
+
+═══════════════════════════════════════════════════════════════════════════════
+ELEMENTOS VISUAIS / DESIGN
+═══════════════════════════════════════════════════════════════════════════════
+
+Cores:
+- Verde escuro (#2d5016) - Principal, botões
+- Verde claro (#4a7c2c) - Secundário, highlights
+- Branco - Fundo
+- Cinza - Texto neutro
+
+Ícones/Emojis:
+📱 Celular/Tech
+🌱 Plantinha/Natureza
+💰 Dinheiro/Valor
+🎯 Objetivo
+✅ Checkmark/Sucesso
+📸 Foto
+📍 Localização
+🔄 Ciclo/Repetição
+📊 Gráfico
+
+Imagens sugeridas:
+1. Hero: QR code sendo escaneado → app abrindo
+2. Seção 1: Produtor trabalhando no campo (sol, cansaço)
+3. Seção 2: Página da fazenda aberta no celular
+4. Seção 3: Gráfico mostrando +30% de aumento
+5. Seção 4: Steps 1-2-3 de como usar
+6. Seção 5: Comprador satisfeito (face real)
+7. Seção 6: Comparação antes/depois
+8. Seção 8: Depoimentos com foto dos produtores
+
+
+═══════════════════════════════════════════════════════════════════════════════
+TONE OF VOICE
+═══════════════════════════════════════════════════════════════════════════════
+
+✓ Conversacional, não corporativo
+✓ Direto, sem enrolação
+✓ Empático com o produtor rural
+✓ Valida o trabalho árduo do produtor
+✓ Prático, mostra benefício REAL não abstract
+✓ Brasileiro, com jeito de quem entende o campo
+✓ Esperançoso, mas realista
+✓ Chama ação clara, sem manipulação
+
+═══════════════════════════════════════════════════════════════════════════════
