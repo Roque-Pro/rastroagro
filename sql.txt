@@ -1,1 +1,23 @@
-Failed to load resource: the server responded with a status of 404 ()Understand this error
+Deployment Details
+Build Failed
+Command "npm install" exited with 1
+
+Created
+roque-pro Avatar
+Roque-Pro
+Just now
+Status
+Error
+Latest
+Duration
+4s
+Just now
+Environment
+Preview
+Domains
+rastroagro-git-master-roque-rafaels-projects.vercel.app
+rastroagro-5zsvmyzs6-roque-rafaels-projects.vercel.app
+Source
+master
+62cef71
+Add favicon.svg

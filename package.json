@@ -9,6 +9,10 @@
     "build": "vite build",
     "preview": "vite preview"
   },
+  "engines": {
+    "npm": ">=9.0.0",
+    "node": ">=18.0.0"
+  },
   "dependencies": {
     "@google/generative-ai": "^0.3.0",
     "@supabase/supabase-js": "^2.38.4",
