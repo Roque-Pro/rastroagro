@@ -1,5 +1,9 @@
-se eu clico nesse link> https://rastroagro-git-master-roque-rafaels-projects.vercel.app/... APLICAÇÃO CARREGA...MAS SE EU CLICO NESSE>https://rastroagro.vercel.app/..a apliação da esse erro no front>>404: NOT_FOUND
+Failed to load resource: the server responded with a status of 404 ()
+
+e no front end>>404: NOT_FOUND
 Code: NOT_FOUND
-ID: gru1::27cqg-1775523097872-267d05809598
+ID: gru1::bpm62-1775526030232-febfa9eaadbb
 
 Read our documentation to learn more about this error.
+
+url>>https://rastroagro.vercel.app/fazenda/fazenda-1775149597
