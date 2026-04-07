@@ -100,12 +100,29 @@ export default function BuyerMap() {
   useEffect(() => {
     if (!mapContainer.current || map.current) return
 
-    map.current = L.map(mapContainer.current).setView([-15.7942, -48.0192], 4)
+    // Aguarda um pouco pra garantir que o DOM renderizou
+    const timer = setTimeout(() => {
+      try {
+        map.current = L.map(mapContainer.current, {
+          zoom: 4,
+          center: [-15.7942, -48.0192]
+        })
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors',
-      maxZoom: 19,
-    }).addTo(map.current)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© OpenStreetMap contributors',
+          maxZoom: 19,
+        }).addTo(map.current)
+
+        // Invalidate size pra Leaflet recalcular
+        setTimeout(() => {
+          if (map.current) map.current.invalidateSize()
+        }, 100)
+      } catch (error) {
+        console.error('Erro ao inicializar mapa:', error)
+      }
+    }, 50)
+
+    return () => clearTimeout(timer)
   }, [])
 
   const renderMarkers = () => {
