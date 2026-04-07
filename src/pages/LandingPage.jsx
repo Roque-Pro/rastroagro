@@ -50,7 +50,7 @@ export default function LandingPage() {
          {/* Background Image com Filtro */}
          <div className="absolute inset-0 z-0">
            <img 
-             src="/img/um-homem-sorri-em-um-campo-de-feijao-com-o-sol-atras-dele_.avif"
+             src="/um-homem-sorri-em-um-campo-de-feijao-com-o-sol-atras-dele_.avif"
              alt="Background"
              className="w-full h-full object-cover"
            />
@@ -226,7 +226,7 @@ export default function LandingPage() {
         {/* Background Image - Mais Leve */}
         <div className="absolute inset-0 opacity-30 pointer-events-none">
           <img 
-            src="/img/um-homem-em-um-campo-de-girassois-esta-em-frente-a-um-por-do-sol_.avif"
+            src="/um-homem-em-um-campo-de-girassois-esta-em-frente-a-um-por-do-sol_.avif"
             alt="Background"
             className="w-full h-full object-cover"
           />
