@@ -23,7 +23,7 @@ export default function FazendaProfile() {
         const { data: perfilData, error: perfilError } = await supabase
           .from('perfis')
           .select('*')
-          .or(`id.eq.${fazendaSlug},slug.eq.${fazendaSlug}`)
+          .or(`id.eq."${fazendaSlug}",slug.eq."${fazendaSlug}"`)
           .single()
 
         if (perfilError) throw perfilError
