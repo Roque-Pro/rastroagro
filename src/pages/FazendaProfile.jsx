@@ -20,11 +20,29 @@ export default function FazendaProfile() {
     const fetchData = async () => {
       try {
         // Buscar perfil pelo slug
-        const { data: perfilData, error: perfilError } = await supabase
+        let perfilData, perfilError;
+        
+        // Tenta buscar por slug primeiro
+        const { data: slugData, error: slugError } = await supabase
           .from('perfis')
           .select('*')
-          .or(`id.eq."${fazendaSlug}",slug.eq."${fazendaSlug}"`)
+          .eq('slug', fazendaSlug)
           .single()
+        
+        if (!slugError) {
+          perfilData = slugData
+          perfilError = null
+        } else {
+          // Se slug falhar, tenta por ID
+          const { data: idData, error: idError } = await supabase
+            .from('perfis')
+            .select('*')
+            .eq('id', fazendaSlug)
+            .single()
+          
+          perfilData = idData
+          perfilError = idError
+        }
 
         if (perfilError) throw perfilError
 
