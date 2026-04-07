@@ -1,9 +1,18 @@
-Failed to load resource: the server responded with a status of 404 ()
+Sua Bio
 
-e no front end>>404: NOT_FOUND
+Gostamos do que fazemos
+
+🔗 Link: fazendadoproenca
+
+...
+
+
+https://rastroagro.vercel.app/fazenda/fazendadoproenca
+
+....
+
+erro>>404: NOT_FOUND
 Code: NOT_FOUND
-ID: gru1::bpm62-1775526030232-febfa9eaadbb
+ID: gru1::jttx2-1775528562502-ea1ba9a3e69c
 
 Read our documentation to learn more about this error.
-
-url>>https://rastroagro.vercel.app/fazenda/fazenda-1775149597
